@@ -136,7 +136,7 @@ function handlerWind(response) {
 }
 function handlerHowTheWetherIs(response) {
   let howTheWetherIs = document.querySelector("#howTheWetherIs");
-  howTheWetherIs.innerHTML = response.data.weather[0].description;
+  howTheWetherIs.innerHTML = response.data.weather[0].main;
 }
 
 //..................geolocalitation....................
