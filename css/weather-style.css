@@ -31,6 +31,9 @@ a:hover {
 #button-current {
   margin-left: 10px;
 }
+.bottom-link {
+  color: cadetblue;
+}
 
 .row {
   display: flex;
