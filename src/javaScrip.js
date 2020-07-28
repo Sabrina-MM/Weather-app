@@ -137,6 +137,12 @@ function handlerWind(response) {
 function handlerHowTheWetherIs(response) {
   let howTheWetherIs = document.querySelector("#howTheWetherIs");
   howTheWetherIs.innerHTML = response.data.weather[0].main;
+  // ChangeIconElemen
+  let iconElement = document.querySelector("#img-center");
+  iconElement.setAttribute(
+    "src",
+    `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
+  );
 }
 
 //..................geolocalitation....................
