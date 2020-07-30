@@ -44,9 +44,9 @@ function calculationTime() {
   }
   let hours = today.getHours();
   if (hours >= 12) {
-    hours = `${hours}:${minutes} pm`;
+    hours = `${hours}:${minutes} `;
   } else {
-    hours = `${hours}:${minutes} am`;
+    hours = `${hours}:${minutes} `;
   }
 
   let days = [
@@ -100,11 +100,47 @@ function celsiusCalculation(event) {
 //..........................
 
 function handlerWeather(response) {
-  handlerHumidyty(response);
-  handlerRealFeel(response);
-  handlerWind(response);
-  handlerHowTheWetherIs(response);
+  setHumidyty(response);
+  setRealFeel(response);
+  setWind(response);
+  setWeatherImg(response);
   setTemperature(response);
+  displayTime(response);
+}
+
+function displayTime(response) {
+  let currentTime = document.querySelector("#week");
+  currentTime.innerHTML = formatDate(response.data.dt * 1000);
+}
+
+function formatDate(timestamp) {
+  let date = new Date(timestamp);
+
+  let days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  let day = days[date.getDay()];
+  return `${day} ${formatHours(timestamp)}`;
+}
+
+function formatHours(timestamp) {
+  let date = new Date(timestamp);
+  let hours = date.getHours();
+  if (hours < 10) {
+    hours = `0${hours}`;
+  }
+  let minutes = date.getMinutes();
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
+  }
+
+  return `${hours}:${minutes}`;
 }
 
 function setTemperature(response) {
@@ -117,24 +153,25 @@ function callWeatherApi() {
   let city = getCity();
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
-  axios.get(`${apiUrl}`).then(handlerWeather);
+  axios.get(`${apiUrl}`).then(handlerWeather); // make a GET request
 }
 
-function handlerHumidyty(response) {
+function setHumidyty(response) {
   let humidity = document.querySelector("#humidity");
   humidity.innerHTML = response.data.main.humidity;
 }
-function handlerRealFeel(response) {
+function setRealFeel(response) {
   let realFeel = document.querySelector("#real-feel");
 
   realFeel.innerHTML = Math.round(response.data.main.feels_like);
 }
 
-function handlerWind(response) {
+function setWind(response) {
   let wind = document.querySelector("#wind");
   wind.innerHTML = Math.round(response.data.wind.speed);
 }
-function handlerHowTheWetherIs(response) {
+
+function setWeatherImg(response) {
   let howTheWetherIs = document.querySelector("#howTheWetherIs");
   howTheWetherIs.innerHTML = response.data.weather[0].main;
   // ChangeIconElemen
@@ -149,10 +186,10 @@ function handlerHowTheWetherIs(response) {
 
 function handlerPosition(response) {
   setHeading(response.data.name);
-  handlerHumidyty(response);
-  handlerRealFeel(response);
-  handlerWind(response);
-  handlerHowTheWetherIs(response);
+  setHumidyty(response);
+  setRealFeel(response);
+  setWind(response);
+  setWeatherImg(response);
   setTemperature(response);
 }
 
@@ -170,4 +207,14 @@ function getCurrentPosition(event) {
   navigator.geolocation.getCurrentPosition(callApiPosition);
 }
 
-//..................................
+//...........set time when you open the app.......................
+
+function setWebCity() {
+  let apiKey = "5df05ec20f5c5b50f9ac557495988486";
+  let city = "London";
+  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+  axios.get(`${apiUrl}`).then(handlerWeather);
+}
+
+setWebCity();
