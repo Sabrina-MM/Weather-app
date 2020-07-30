@@ -24,9 +24,8 @@ a:hover {
   color: #0056b3;
 }
 .howTheWetherIs {
-  margin-left: 41px;
-  margin-top: -12px;
-  font-size: 21px;
+  margin-left: 42px;
+  margin-top: -7px;
 }
 #button-current {
   margin-left: 10px;
@@ -72,6 +71,7 @@ a:hover {
   text-align: center;
 }
 */
+
 .container {
   width: 900px;
   padding: 20px;
