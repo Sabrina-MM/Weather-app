@@ -1,3 +1,5 @@
+let apiKey = "5df05ec20f5c5b50f9ac557495988486";
+
 //All EventListener
 
 let fahrenheit = document.querySelector("#fahrenheit-link");
@@ -18,7 +20,8 @@ function main(event) {
   event.preventDefault();
   setCountryTime();
   setHeading(getCity());
-  callWeatherApi();
+  callWeatherApi(getCity());
+  callForecastApi_byCity(getCity());
 }
 function getCity() {
   let searchBar = document.querySelector("#city-input");
@@ -148,9 +151,7 @@ function setTemperature(response) {
   temperature.innerHTML = Math.round(response.data.main.temp);
 }
 
-function callWeatherApi() {
-  let apiKey = "5df05ec20f5c5b50f9ac557495988486";
-  let city = getCity();
+function callWeatherApi(city) {
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
   axios.get(`${apiUrl}`).then(handlerWeather); // make a GET request
@@ -196,12 +197,16 @@ function handlerPosition(response) {
 function callApiPosition(position) {
   let longitude = position.coords.longitude;
   let latitude = position.coords.latitude;
-  let apiKey = "5df05ec20f5c5b50f9ac557495988486";
+
+  callForecastApi_byPosition(longitude, latitude);
+  callApiWeather_byPosition(longitude, latitude);
+}
+
+function callApiWeather_byPosition(longitude, latitude) {
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
 
   axios.get(`${apiUrl}`).then(handlerPosition);
 }
-
 function getCurrentPosition(event) {
   event.preventDefault();
   navigator.geolocation.getCurrentPosition(callApiPosition);
@@ -209,12 +214,64 @@ function getCurrentPosition(event) {
 
 //...........set time when you open the app.......................
 
-function setWebCity() {
-  let apiKey = "5df05ec20f5c5b50f9ac557495988486";
-  let city = "London";
-  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
-  axios.get(`${apiUrl}`).then(handlerWeather);
+function displayDefaultCityInformation() {
+  setCountryTime();
+  setHeading("London");
+  callWeatherApi("London");
+  callForecastApi_byCity("London");
 }
 
-setWebCity();
+displayDefaultCityInformation();
+
+//................seting the forecast......
+
+function displayForecast(response) {
+  let forecastElement = document.querySelector("#card-group-forecast");
+  forecastElement.innerHTML = null;
+  let forecast = null;
+
+  for (let index = 0; index < 7; index++) {
+    //loop
+    forecast = response.data.list[index];
+
+    forecastElement.innerHTML += `<div class="card border mb-3" style="max-width: 9rem;">
+      <h5>${formatHours(forecast.dt * 1000)}</h5>
+      <div class="card-body">
+      <img src="http://openweathermap.org/img/wn/${
+        forecast.weather[0].icon
+      }@2x.png" alt="" />
+                                  
+      </div>
+      <div class="card-footer">
+      <span class="wob_t" style="display:inline">${Math.round(
+        forecast.main.temp_max
+      )}</span>
+      <span class="text-muted">/${Math.round(forecast.main.temp_min)}</span>
+      </div>
+    </div>`;
+  }
+}
+
+function callForecastApi_byCity(city) {
+  let apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
+
+  axios.get(`${apiUrl}`).then(displayForecast);
+}
+
+function callForecastApi_byPosition(longitude, latitude) {
+  let apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+
+  axios.get(`${apiUrl}`).then(displayForecast);
+}
+//-----------------
+function getCity1(city) {
+  return city + " es la polla";
+}
+
+function Ricardo() {
+  console.log(getCity1("Las palmas"));
+}
+
+function Sabrina() {
+  console.log(getCity1("Tenerife"));
+}
