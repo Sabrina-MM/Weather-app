@@ -19,7 +19,6 @@ button.addEventListener("click", getCurrentPosition);
 function main(event) {
   event.preventDefault();
   setCountryTime();
-  setHeading(getCity());
   callWeatherApi(getCity());
   callForecastApi_byCity(getCity());
 }
@@ -30,9 +29,9 @@ function getCity() {
   return suppliedCountry;
 }
 
-function setHeading(city) {
+function setHeading(city, country) {
   let h1 = document.querySelector("#heading");
-  h1.innerHTML = ` ${city}`;
+  h1.innerHTML = ` ${city}, ${country}`;
 }
 
 function firstLetterToUpperCase(value) {
@@ -84,7 +83,6 @@ function fahrenheitCalculation(event) {
     element.innerHTML = numberNoDecimal;
   }
 }
-
 function Nodecimal(delateDecimal) {
   return Math.round(delateDecimal);
 }
@@ -103,6 +101,7 @@ function celsiusCalculation(event) {
 //..........................
 
 function handlerWeather(response) {
+  setHeading(response.data.name, response.data.sys.country);
   setHumidyty(response);
   setRealFeel(response);
   setWind(response);
@@ -186,7 +185,7 @@ function setWeatherImg(response) {
 //..................geolocalitation....................
 
 function handlerPosition(response) {
-  setHeading(response.data.name);
+  setHeading(response.data.name, response.data.sys.country);
   setHumidyty(response);
   setRealFeel(response);
   setWind(response);
@@ -263,15 +262,5 @@ function callForecastApi_byPosition(longitude, latitude) {
 
   axios.get(`${apiUrl}`).then(displayForecast);
 }
-//-----------------
-function getCity1(city) {
-  return city + " es la polla";
-}
 
-function Ricardo() {
-  console.log(getCity1("Las palmas"));
-}
-
-function Sabrina() {
-  console.log(getCity1("Tenerife"));
-}
+//response.data.sys.country i need to fix this
