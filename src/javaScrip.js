@@ -182,7 +182,7 @@ function setWeatherImg(response) {
   );
 }
 
-//..................geolocalitation....................
+//..................geolocalization....................
 
 function handlerPosition(response) {
   setHeading(response.data.name, response.data.sys.country);
@@ -222,7 +222,7 @@ function displayDefaultCityInformation() {
 
 displayDefaultCityInformation();
 
-//................seting the forecast......
+//................setting the forecast......
 
 function displayForecast(response) {
   let forecastElement = document.querySelector("#card-group-forecast");
@@ -262,5 +262,3 @@ function callForecastApi_byPosition(longitude, latitude) {
 
   axios.get(`${apiUrl}`).then(displayForecast);
 }
-
-//response.data.sys.country i need to fix this
